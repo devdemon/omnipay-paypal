@@ -10,7 +10,9 @@ class ProAuthorizeRequest extends AbstractRequest
     public function getData()
     {
         $this->validate('amount', 'card');
-        $this->getCard()->validate();
+
+        $card = $this->getCard();
+        $card->validate();
 
         $data = $this->getBaseData();
         $data['METHOD'] = 'DoDirectPayment';
@@ -21,22 +23,32 @@ class ProAuthorizeRequest extends AbstractRequest
         $data['DESC'] = $this->getDescription();
 
         // add credit card details
-        $data['ACCT'] = $this->getCard()->getNumber();
-        $data['CREDITCARDTYPE'] = $this->getCard()->getBrand();
-        $data['EXPDATE'] = $this->getCard()->getExpiryDate('mY');
-        $data['STARTDATE'] = $this->getCard()->getStartDate('mY');
-        $data['CVV2'] = $this->getCard()->getCvv();
-        $data['ISSUENUMBER'] = $this->getCard()->getIssueNumber();
+        $data['ACCT'] = $card->getNumber();
+        $data['CREDITCARDTYPE'] = $card->getBrand();
+        $data['EXPDATE'] = $card->getExpiryDate('mY');
+        $data['STARTDATE'] = $card->getStartDate('mY');
+        $data['CVV2'] = $card->getCvv();
+        $data['ISSUENUMBER'] = $card->getIssueNumber();
         $data['IPADDRESS'] = $this->getClientIp();
-        $data['FIRSTNAME'] = $this->getCard()->getFirstName();
-        $data['LASTNAME'] = $this->getCard()->getLastName();
-        $data['EMAIL'] = $this->getCard()->getEmail();
-        $data['STREET'] = $this->getCard()->getAddress1();
-        $data['STREET2'] = $this->getCard()->getAddress2();
-        $data['CITY'] = $this->getCard()->getCity();
-        $data['STATE'] = $this->getCard()->getState();
-        $data['ZIP'] = $this->getCard()->getPostcode();
-        $data['COUNTRYCODE'] = strtoupper($this->getCard()->getCountry());
+        $data['FIRSTNAME'] = $card->getFirstName();
+        $data['LASTNAME'] = $card->getLastName();
+        $data['EMAIL'] = $card->getEmail();
+        $data['STREET'] = $card->getAddress1();
+        $data['STREET2'] = $card->getAddress2();
+        $data['CITY'] = $card->getCity();
+        $data['STATE'] = $card->getState();
+        $data['ZIP'] = $card->getPostcode();
+        $data['COUNTRYCODE'] = strtoupper($card->getCountry());
+
+        // shipping information
+        $data['SHIPTONAME'] = $card->getShippingName();
+        $data['SHIPTOSTREET'] = $card->getShippingAddress1();
+        $data['SHIPTOSTREET2'] = $card->getShippingAddress2();
+        $data['SHIPTOCITY'] = $card->getShippingCity();
+        $data['SHIPTOSTATE'] = $card->getShippingState();
+        $data['SHIPTOZIP'] = $card->getShippingPostcode();
+        $data['SHIPTOCOUNTRYCODE'] = strtoupper($card->getShippingCountry());
+        $data['SHIPTOPHONENUM'] = $card->getShippingPhone();
 
         return $data;
     }
