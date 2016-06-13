@@ -1,24 +1,23 @@
 <?php
 /**
- * PayPal REST Fetch Transaction Request
+ * PayPal REST Fetch Purchase Request
  */
 
 namespace Omnipay\PayPal\Message;
 
 /**
- * PayPal REST Fetch Transaction Request
+ * PayPal REST Fetch Purchase Request
  *
- * To get details about completed payments (sale transaction) created by a payment request
- * or to refund a direct sale transaction, PayPal provides the /sale resource and related
- * sub-resources.
+ * Use this call to get details about payments that have not completed, such
+ * as payments that are created and approved, or if a payment has failed.
  *
- * Example -- note this example assumes that the purchase has been successful
- * and that the transaction ID returned from the purchase is held in $sale_id.
+ * ### Example
+ *
  * See RestPurchaseRequest for the first part of this example transaction:
  *
  * <code>
  *   // Fetch the transaction so that details can be found for refund, etc.
- *   $transaction = $gateway->fetchTransaction();
+ *   $transaction = $gateway->fetchPurchase();
  *   $transaction->setTransactionReference($sale_id);
  *   $response = $transaction->send();
  *   $data = $response->getData();
@@ -26,9 +25,9 @@ namespace Omnipay\PayPal\Message;
  * </code>
  *
  * @see RestPurchaseRequest
- * @link https://developer.paypal.com/docs/api/#sale-transactions
+ * @link https://developer.paypal.com/docs/api/#look-up-a-payment-resource
  */
-class RestFetchTransactionRequest extends AbstractRestRequest
+class RestFetchPurchaseRequest extends AbstractRestRequest
 {
     public function getData()
     {
@@ -51,6 +50,6 @@ class RestFetchTransactionRequest extends AbstractRestRequest
 
     public function getEndpoint()
     {
-        return parent::getEndpoint() . '/payments/sale/' . $this->getTransactionReference();
+        return parent::getEndpoint() . '/payments/payment/' . $this->getTransactionReference();
     }
 }

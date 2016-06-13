@@ -3,14 +3,14 @@
 namespace Omnipay\PayPal\Message;
 
 /**
- * PayPal Pro Purchase Request
+ * PayPal Express Order Request
  */
-class ProPurchaseRequest extends ProAuthorizeRequest
+class ExpressOrderRequest extends ExpressAuthorizeRequest
 {
     public function getData()
     {
         $data = parent::getData();
-        $data['PAYMENTACTION'] = 'Sale';
+        $data['PAYMENTREQUEST_0_PAYMENTACTION'] = 'Order';
 
         return $data;
     }
